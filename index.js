@@ -63,6 +63,7 @@ try {
     embeds,
   };
 
+  console.log(JSON.stringify(payload));
   axios
     .post(`${webhook}?wait=true`, JSON.stringify(payload), {
       headers: {
