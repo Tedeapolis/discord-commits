@@ -63,7 +63,6 @@ try {
     embeds,
   };
 
-  console.log(JSON.stringify(payload));
   axios
     .post(`${webhook}?wait=true`, JSON.stringify(payload), {
       headers: {
@@ -76,6 +75,7 @@ try {
       process.exit(0);
     })
     .catch((err) => {
+      console.log(JSON.stringify(payload));
       console.error("Error :", err.response.status, err.response.statusText);
       core.setFailed(
         "Message :",
