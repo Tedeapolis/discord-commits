@@ -16,6 +16,8 @@ try {
     env: { ...process.env },
     github: { ...github },
   };
+  
+ console.log(JSON.stringify(data));
 
   github.context.payload.commits = github.context.payload.commits || [
     {
