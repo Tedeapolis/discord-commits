@@ -70,7 +70,6 @@ async function run() {
 
         while (embeds.length > 0) {
             payload["embeds"] = embeds.splice(0, 10);
-            payload = {}
 
             try {
                 await axios
@@ -88,6 +87,8 @@ async function run() {
                     err.response ? err.response.data : err.message
                 );
             }
+
+            payload = {}
         }
 
         console.log("Message sent ! Shutting down ...");
