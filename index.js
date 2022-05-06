@@ -10,6 +10,9 @@ async function run() {
     try {
         const message = core.getInput("message");
         const webhook = core.getInput("webhook");
+        const url = core.getInput("url");
+        const iconUrl = core.getInput("icon_url") ?? "https://i.imgur.com/eJ08X1Z.png";
+        const author = core.getInput("author") ?? "Tedeapolis";
         const embed =
             core.getInput("embed") ||
             '{ "title": "{{ commit.title }}", "description": "{{ commit.description }}", "url": "{{ commit.url }}", "author": { "name": "{{ commit.author.name }} ({{ commit.author.username }})", "icon_url": "https://avatars.io/gravatar/{{ commit.author.email }}"} }';
@@ -56,6 +59,7 @@ async function run() {
                 commit: {
                     title: commit.message.split("\n\n").slice(0, 1).join("\n\n"),
                     description: commit.message.split("\n\n").slice(1).join("\n\n"),
+                    color: 31668,
                     ...commit,
                 },
             };
@@ -67,6 +71,16 @@ async function run() {
         let payload = {
             content: _.template(message)(data),
         }
+
+        embeds.splice(0, 0, {
+            "description": _.template(message)(data),
+            "color": 2752256,
+            "author": {
+                "name": _.template(author)(data),
+                "url": _.template(url)(data),
+                "icon_url": _.template(iconUrl)(data),
+            }
+        })
 
         while (embeds.length > 0) {
             payload["embeds"] = embeds.splice(0, 10);
