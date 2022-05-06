@@ -68,9 +68,7 @@ async function run() {
             return parsed;
         });
 
-        let payload = {
-            content: _.template(message)(data),
-        }
+        let payload = {}
 
         embeds.splice(0, 0, {
             "description": _.template(message)(data),
