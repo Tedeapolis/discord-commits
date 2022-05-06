@@ -21,8 +21,6 @@ async function run() {
             github: { ...github },
         };
 
-        console.log(JSON.stringify(data));
-
         github.context.payload.commits = github.context.payload.commits || [
             {
                 author: {
@@ -59,7 +57,6 @@ async function run() {
                 commit: {
                     title: commit.message.split("\n\n").slice(0, 1).join("\n\n"),
                     description: commit.message.split("\n\n").slice(1).join("\n\n"),
-                    color: 31668,
                     ...commit,
                 },
             };

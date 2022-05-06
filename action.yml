@@ -11,6 +11,12 @@ inputs:
     description: "A general message that is displayed for all commits."
   embed:
     description: "JSON string that accepts double braces for templating."
+  url:
+    description: "The url of the commit diff"
+  icon_url:
+    description: "The icon url of the author for the header message"
+  author:
+    description: "The author for the header message"
 
 runs:
   using: "node16"
