@@ -51,7 +51,17 @@ async function run() {
         /**
          * @type any[]
          */
-        const embeds = github.context.payload.commits.map((commit) => {
+        const embeds = github.context.payload.commits.filter((commit) => {
+            const message = commit.message.toLower();
+            if (message.includes("REDACTED")) {
+                return false;
+            }
+            if (message.includes("Merge")) {
+                return false;
+            }
+
+            return true;
+        }).map((commit) => {
             const $data = {
                 ...data,
                 commit: {
@@ -66,6 +76,12 @@ async function run() {
         });
 
         let payload = {}
+
+        if (embeds.length == 0) {
+            console.log("All messages filtered, cancelling run.");
+            process.exit(0);
+            return;
+        }
 
         embeds.splice(0, 0, {
             "description": _.template(message)(data),
