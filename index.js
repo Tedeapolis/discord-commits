@@ -75,6 +75,8 @@ async function run() {
             return parsed;
         });
 
+        data.length = embeds.length;
+
         let payload = {}
 
         if (embeds.length == 0) {
