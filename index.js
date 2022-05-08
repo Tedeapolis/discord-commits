@@ -52,11 +52,11 @@ async function run() {
          * @type any[]
          */
         const embeds = github.context.payload.commits.filter((commit) => {
-            const message = commit.message.toLower();
-            if (message.includes("REDACTED")) {
+            const message = commit.message.toLowerCase();
+            if (message.includes("redacted")) {
                 return false;
             }
-            if (message.includes("Merge")) {
+            if (message.includes("merge")) {
                 return false;
             }
 
