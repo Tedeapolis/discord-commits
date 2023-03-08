@@ -10,6 +10,7 @@ async function run() {
     try {
         const message = core.getInput("message");
         const webhook = core.getInput("webhook");
+        const webhook_all = core.getInput("webhook_all");
         const url = core.getInput("url");
         const iconUrl = core.getInput("icon_url") ?? "https://i.imgur.com/eJ08X1Z.png";
         const author = core.getInput("author") ?? "Tedeapolis";
@@ -79,6 +80,54 @@ async function run() {
 
         let payload = {}
 
+        if (webhook_all) {
+            const embeds_all = github.context.payload.commits.filter((commit) => {
+                const message = commit.message.toLowerCase();
+                if (message.includes("merge")) {
+                    return false;
+                }
+    
+                return true;
+            }).map((commit) => {
+                const $data = {
+                    ...data,
+                    commit: {
+                        title: commit.message.split("\n\n").slice(0, 1).join("\n\n"),
+                        description: commit.message.split("\n\n").slice(1).join("\n\n"),
+                        ...commit,
+                    },
+                };
+    
+                const parsed = ST.select($data).transformWith(JSON.parse(embed)).root();
+                return parsed;
+            });
+
+            while (embeds_all.length > 0) {
+                payload["embeds"] = embeds.splice(0, 10);
+
+                try {
+                    await fetch(`${webhook_all}?wait=true`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-GitHub-Event": github.context.eventName || "push",
+                        },
+                        body: JSON.stringify(payload)
+                    });
+                } catch (err) {
+                    console.log(JSON.stringify(payload));
+                    console.error("Error :", err.response.status, err.response.statusText);
+                    core.setFailed(
+                        "Message :",
+                        err.response ? err.response.data : err.message
+                    );
+                }
+
+                payload = {}
+            }
+        }
+
+
         if (embeds.length == 0) {
             console.log("All messages filtered, cancelling run.");
             process.exit(0);
@@ -99,13 +148,14 @@ async function run() {
             payload["embeds"] = embeds.splice(0, 10);
 
             try {
-                await axios
-                    .post(`${webhook}?wait=true`, JSON.stringify(payload), {
-                        headers: {
-                            "Content-Type": "application/json",
-                            "X-GitHub-Event": github.context.eventName || "push",
-                        },
-                    });
+                await fetch(`${webhook}?wait=true`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-GitHub-Event": github.context.eventName || "push",
+                    },
+                    body: JSON.stringify(payload)
+                });
             } catch (err) {
                 console.log(JSON.stringify(payload));
                 console.error("Error :", err.response.status, err.response.statusText);
