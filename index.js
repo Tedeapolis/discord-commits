@@ -103,7 +103,7 @@ async function run() {
             });
 
             while (embeds_all.length > 0) {
-                payload["embeds"] = embeds.splice(0, 10);
+                payload["embeds"] = embeds_all.splice(0, 10);
 
                 try {
                     await axios.post(`${webhook_all}?wait=true`, JSON.stringify(payload), {
