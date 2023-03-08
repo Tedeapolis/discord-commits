@@ -7,6 +7,9 @@ inputs:
   webhook:
     description: "discord webhook url without /github"
     required: true
+  webhook_all:
+    descrition: "discord webhook url without /github, all commits including redacted will be sent here"
+    required: false
   message:
     description: "A general message that is displayed for all commits."
   embed:
