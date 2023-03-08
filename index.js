@@ -106,22 +106,12 @@ async function run() {
                 payload["embeds"] = embeds.splice(0, 10);
 
                 try {
-                    const response = await fetch(`${webhook_all}?wait=true`, {
-                        method: "POST",
+                    await axios.post(`${webhook_all}?wait=true`, JSON.stringify(payload), {
                         headers: {
                             "Content-Type": "application/json",
                             "X-GitHub-Event": github.context.eventName || "push",
                         },
-                        body: JSON.stringify(payload)
                     });
-                    if (!response.ok) {
-                        console.log(JSON.stringify(payload));
-                        console.error("Error :", response.status, response.statusText);
-                        core.setFailed(
-                            "Message :",
-                            response ? response.data : err.message
-                        );
-                    }
                 } catch (err) {
                     console.log(JSON.stringify(payload));
                     console.error("Error :", err);
@@ -156,22 +146,12 @@ async function run() {
             payload["embeds"] = embeds.splice(0, 10);
 
             try {
-                const response = await fetch(`${webhook}?wait=true`, {
-                    method: "POST",
+                await axios.post(`${webhook}?wait=true`, JSON.stringify(payload), {
                     headers: {
                         "Content-Type": "application/json",
                         "X-GitHub-Event": github.context.eventName || "push",
                     },
-                    body: JSON.stringify(payload)
                 });
-                if (!response.ok) {
-                    console.log(JSON.stringify(payload));
-                    console.error("Error :", response.status, response.statusText);
-                    core.setFailed(
-                        "Message :",
-                        response ? response.data : err.message
-                    );
-                }
             } catch (err) {
                 console.log(JSON.stringify(payload));
                 console.error("Error :", err);
