@@ -106,7 +106,7 @@ async function run() {
                 payload["embeds"] = embeds.splice(0, 10);
 
                 try {
-                    await fetch(`${webhook_all}?wait=true`, {
+                    const response = await fetch(`${webhook_all}?wait=true`, {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",
@@ -114,9 +114,17 @@ async function run() {
                         },
                         body: JSON.stringify(payload)
                     });
+                    if (!response.ok) {
+                        console.log(JSON.stringify(payload));
+                        console.error("Error :", response.status, response.statusText);
+                        core.setFailed(
+                            "Message :",
+                            response ? response.data : err.message
+                        );
+                    }
                 } catch (err) {
                     console.log(JSON.stringify(payload));
-                    console.error("Error :", err.response.status, err.response.statusText);
+                    console.error("Error :", err);
                     core.setFailed(
                         "Message :",
                         err.response ? err.response.data : err.message
@@ -148,7 +156,7 @@ async function run() {
             payload["embeds"] = embeds.splice(0, 10);
 
             try {
-                await fetch(`${webhook}?wait=true`, {
+                const response = await fetch(`${webhook}?wait=true`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -156,9 +164,17 @@ async function run() {
                     },
                     body: JSON.stringify(payload)
                 });
+                if (!response.ok) {
+                    console.log(JSON.stringify(payload));
+                    console.error("Error :", response.status, response.statusText);
+                    core.setFailed(
+                        "Message :",
+                        response ? response.data : err.message
+                    );
+                }
             } catch (err) {
                 console.log(JSON.stringify(payload));
-                console.error("Error :", err.response.status, err.response.statusText);
+                console.error("Error :", err);
                 core.setFailed(
                     "Message :",
                     err.response ? err.response.data : err.message
