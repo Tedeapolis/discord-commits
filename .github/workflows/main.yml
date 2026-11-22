@@ -1,6 +1,26 @@
 on: [push]
 
 jobs:
+  check_dist:
+    runs-on: ubuntu-latest
+    name: check dist is up to date
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up pnpm and Node 24, install dependencies
+        uses: pnpm/setup@v3
+        with:
+          runtime: node@24
+          cache: true
+          require-lockfile: true
+
+      - name: Build
+        run: pnpm build
+
+      - name: Fail if dist is stale
+        run: git diff --exit-code --stat -- dist/index.js
+
   disord_test_message:
     runs-on: ubuntu-latest
     name: discord commits
