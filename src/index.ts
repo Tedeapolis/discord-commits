@@ -34,34 +34,7 @@ async function run(): Promise<void> {
             github: { ...github },
         };
 
-        github.context.payload.commits = github.context.payload.commits || [
-            {
-                author: {
-                    email: "burroughszeb@me.com",
-                    name: "Zeb",
-                    username: "ZebTheWizard",
-                },
-                message: "this is a title\n\nthis is a description",
-            },
-            {
-                author: {
-                    email: "burroughszeb@me.com",
-                    name: "Zeb",
-                    username: "ZebTheWizard",
-                },
-                message:
-                    "testing\n" +
-                    "\n" +
-                    "**What is new?**\n" +
-                    "I'm testing out some capability.\n" +
-                    "~what do you think?~\n" +
-                    "```js\n" +
-                    "console.log('asdf');\n" +
-                    "```",
-            },
-        ];
-
-        const commits: Commit[] = github.context.payload.commits;
+        const commits: Commit[] = github.context.payload.commits ?? [];
 
         const toEmbeds = (list: Commit[]): Embed[] =>
             list.flatMap((commit) => {

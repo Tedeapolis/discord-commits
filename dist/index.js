@@ -27442,25 +27442,7 @@ async function run() {
       env: { ...process.env },
       github: { ...github }
     };
-    github.context.payload.commits = github.context.payload.commits || [
-      {
-        author: {
-          email: "burroughszeb@me.com",
-          name: "Zeb",
-          username: "ZebTheWizard"
-        },
-        message: "this is a title\n\nthis is a description"
-      },
-      {
-        author: {
-          email: "burroughszeb@me.com",
-          name: "Zeb",
-          username: "ZebTheWizard"
-        },
-        message: "testing\n\n**What is new?**\nI'm testing out some capability.\n~what do you think?~\n```js\nconsole.log('asdf');\n```"
-      }
-    ];
-    const commits = github.context.payload.commits;
+    const commits = github.context.payload.commits ?? [];
     const toEmbeds = (list) => list.flatMap((commit) => {
       const $data = {
         ...data,
