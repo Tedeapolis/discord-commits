@@ -6,15 +6,18 @@ jobs:
     name: discord commits
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v7
 
-      - name: Use Node 12.x
-        uses: actions/setup-node@v1
+      - name: Set up pnpm and Node 24, install dependencies
+        uses: pnpm/setup@v3
         with:
-          node-version: 12.x
+          runtime: node@24
+          cache: true
+          require-lockfile: true
 
-      - name: Install NPM Dependencies (prod)
-        run: npm install --frozen-lockfile --production
+      - name: Build
+        run: pnpm build
+
       - name: Send message to discord
         uses: ./ # Uses an action in the root directory
         with:

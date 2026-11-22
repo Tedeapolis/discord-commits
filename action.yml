@@ -22,5 +22,5 @@ inputs:
     description: "The author for the header message"
 
 runs:
-  using: "node16"
-  main: "index.js"
+  using: "node24"
+  main: "dist/index.js"
