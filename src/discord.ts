@@ -57,9 +57,10 @@ function validUrl(value: unknown, allowAttachment = false): string | undefined {
         return undefined;
     }
 
-    const { protocol } = new URL(url);
+    const parsed = new URL(url);
+    const { protocol } = parsed;
     const allowed = protocol === "http:" || protocol === "https:" || (allowAttachment && protocol === "attachment:");
-    return allowed ? url : undefined;
+    return allowed ? parsed.href : undefined; // href is encoded, since Discord rejects raw spaces.
 }
 
 function validColor(value: unknown): number | undefined {

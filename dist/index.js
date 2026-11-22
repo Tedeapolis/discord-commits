@@ -27229,9 +27229,10 @@ function validUrl(value, allowAttachment = false) {
   if (!URL.canParse(url)) {
     return void 0;
   }
-  const { protocol } = new URL(url);
+  const parsed = new URL(url);
+  const { protocol } = parsed;
   const allowed = protocol === "http:" || protocol === "https:" || allowAttachment && protocol === "attachment:";
-  return allowed ? url : void 0;
+  return allowed ? parsed.href : void 0;
 }
 function validColor(value) {
   return typeof value === "number" && Number.isInteger(value) && value >= 0 && value <= 16777215 ? value : void 0;
